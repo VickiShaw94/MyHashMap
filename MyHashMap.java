@@ -1,7 +1,7 @@
 public class MyHashMap<K, V> {
-    private MapEntry<K, V>[] table;
-    private int size;
-    private double load;
+    public MapEntry<K, V>[] table;
+    public int size;
+    public double load;
 
     /**
      * Creates a hash map with no entries. The backing array has an initial
@@ -18,6 +18,14 @@ public class MyHashMap<K, V> {
         size = 0;
     }
 
+    /**
+     * Adds new entry into hashmap, with quadratic probine
+     * with specified key mapped to specified value, allows null values
+     * 
+     * @param key to add into the hashmap
+     * @param value to add to hashmap, corresponding to key
+     * @return old value if duplicate key
+    */ 
     public V set(K key, V value) {
         if (key == null) {
             System.out.println("Key cannot be set if null.");
@@ -75,6 +83,7 @@ public class MyHashMap<K, V> {
 
     /**
      * Helper method to identify duplicate key, returns the old value
+     * 
      * @param key key to look for duplicates
      * @param value new value to replace old value
      * @param index start of where to start looking
@@ -98,6 +107,13 @@ public class MyHashMap<K, V> {
         return null;
     }
 
+
+    /**
+     * Removes entry specified by key from hashmap
+     * 
+     * @param key to remove from hashmap
+     * @return removed object value associated with key, if any
+     */
     public V delete(K key) {
         if (key == null) return null;
         int index = Math.abs(key.hashCode()) % table.length;
@@ -121,7 +137,7 @@ public class MyHashMap<K, V> {
 
     /**
      * Gets MyHashMap entry value from key. Searches through entries using
-     * quadratic probing. Throws NoSuchElementException if not found.
+     * quadratic probing.
      * 
      * @param initialCapacity initial capacity of the backing array
      * @return object value associated with key, if any
@@ -146,18 +162,30 @@ public class MyHashMap<K, V> {
         return null;
     }
 
+
+    /**
+     * Calculates the load factor of the hashmap by dividing size by table 
+     * length
+     * 
+     * @return float denoting the load of the hashmap
+     */
     public float load() {
         return (float) (size) / (float) table.length;
     }
 
-
+    /**
+     * Resizes backing array if load capacity is exceeded. The load value (0.75) 
+     * provides a good tradeoff between time and space complexity
+     * 
+     * @param initialCapacity initial capacity of the backing array
+     * @return object value associated with key, if any
+     */
     private void resizeBackingTable(int length) {
         if (length < size) {
             System.out.println("Not a valid length");
         }
         MapEntry[] newTable = table;
         
-        //clear();
         size = 0;
 
         table = new MapEntry[length];
@@ -169,21 +197,22 @@ public class MyHashMap<K, V> {
         }
     }
  
-    /**
-    * For testing purposes! 
-    */   
-    public MapEntry<K, V>[] getTable() {
-        return table;
-    }
-
     public int getSize() {
         return size;
     }
 
     /**
-    * Inner class (static) to denote entries in the map. 
+    * Gets the backing array for testing purposes
+    * @return backing array of hashmap
+    */   
+    public MapEntry<K, V>[] getTable() {
+        return table;
+    }
+
+    /**
+    * Inner class (static) to denote map entries. 
     */
-    private class MapEntry<K, V> {
+    public class MapEntry<K, V> {
         private boolean removed;
         private K key;
         private V value;
@@ -205,31 +234,12 @@ public class MyHashMap<K, V> {
             return key;
         }
 
-        public void setKey(K key) {
-            this.key = key;
-        }
-
         public V getValue() {
             return value;
         }
 
         public void setValue(V value) {
             this.value = value;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (!(o instanceof MapEntry)) {
-                return false;
-            } else {
-                MapEntry<K, V> that = (MapEntry<K, V>) o;
-                return that.getKey().equals(key) && that.getValue().equals(value);
-            }
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Key: %s, Value: %s", key.toString(), value.toString());
         }
     }
 }
