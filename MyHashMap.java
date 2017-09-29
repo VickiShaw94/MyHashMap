@@ -1,3 +1,9 @@
+
+/**
+ * KPCB application for single class implementation of hashmap using primitives
+ *
+ * @author Vicki Shaw
+ */
 public class MyHashMap<K, V> {
     public MapEntry<K, V>[] table;
     public int size;
@@ -9,11 +15,11 @@ public class MyHashMap<K, V> {
      *
      * @param initialCapacity initial capacity of the backing array
      */
+    //@SuppressWarnings("unchecked")
     public MyHashMap(int initialCapacity) {
         if (initialCapacity <= 0) {
             throw new IllegalArgumentException("Initial capacity must be positive!");
         }
-        load = 0.75; //the load factor allows a good tradeoff between time and space cost
         table = new MapEntry[initialCapacity];
         size = 0;
     }
@@ -26,14 +32,15 @@ public class MyHashMap<K, V> {
      * @param value to add to hashmap, corresponding to key
      * @return old value if duplicate key
     */ 
-    public V set(K key, V value) {
+    public boolean set(K key, V value) {
         if (key == null) {
             System.out.println("Key cannot be set if null.");
-            return null;
+            return false;
         }
 
-        if ((double) (size + 1) >= (table.length * load)) {
-            resizeBackingTable(2 * table.length + 1);
+        if (size == table.length) {
+            System.out.println("Hashmap is full!");
+            return false;
         }
 
         int quad = 1;
@@ -44,17 +51,16 @@ public class MyHashMap<K, V> {
             if (table[newIndex] == null) {
                 table[newIndex] = entry;
                 size++;
-                return null;
+                return true;
             } else if (table[newIndex].getKey().equals(key)) {
-                V returnValue = table[newIndex].getValue();
                 table[newIndex].setValue(value); //entry?
                 if (table[newIndex].isRemoved()) {
                     size++;
                     table[newIndex].setRemoved(false);
-                    return null;
+                    return true;
                 }
                 table[newIndex].setRemoved(false);
-                return returnValue;
+                return true;
             } else if (!table[newIndex].getKey().equals(key)) {
                 if (table[newIndex].isRemoved()) {
 
@@ -65,20 +71,21 @@ public class MyHashMap<K, V> {
                     if (oldValue == null) { //no duplicates
                         table[ogIndex] = entry;
                         size++;
-                        return null;
+                        return true;
                     } else {
-                        return oldValue;
+                        return false;
                     }
                 }
             }
 
             newIndex = (index + quad * quad) % table.length;
 
-            if ((quad) > table.length) {
-                resizeBackingTable(2 * table.length + 1);
+            if ((quad++) > table.length) {
+                // hashmap is full
+                break;
             }
-            quad++;
         }
+        return false;
     }
 
     /**
@@ -173,30 +180,6 @@ public class MyHashMap<K, V> {
         return (float) (size) / (float) table.length;
     }
 
-    /**
-     * Resizes backing array if load capacity is exceeded. The load value (0.75) 
-     * provides a good tradeoff between time and space complexity
-     * 
-     * @param initialCapacity initial capacity of the backing array
-     * @return object value associated with key, if any
-     */
-    private void resizeBackingTable(int length) {
-        if (length < size) {
-            System.out.println("Not a valid length");
-        }
-        MapEntry[] newTable = table;
-        
-        size = 0;
-
-        table = new MapEntry[length];
-        //Do not include removed flagged entries
-        for (MapEntry<K, V> aTable : newTable) {
-            if (aTable != null && !aTable.isRemoved()) {
-                set(aTable.getKey(), aTable.getValue());
-            }
-        }
-    }
- 
     public int getSize() {
         return size;
     }

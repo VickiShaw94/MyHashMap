@@ -1,7 +1,13 @@
+
+/**
+ * Test file for testing MyHashMap implementation. 
+ *
+ * @author Vicki Shaw
+ */
 public class TestHashMap {
 	private static int size = 11;
     public static void main(String[] args) {
-		MyHashMap<String, Object> test = new MyHashMap<String, Object>(size);
+		MyHashMap<String, Object> test = new MyHashMap<>(size);
 
         System.out.println();
         System.out.println("TEST SIMPLE SET");
@@ -16,6 +22,7 @@ public class TestHashMap {
         System.out.println();
 
         System.out.println("Proper Load?");
+        System.out.println("size: " + test.getSize());
         System.out.println(((float) 4 / (float) size) == test.load());
         System.out.println();
 
@@ -28,8 +35,8 @@ public class TestHashMap {
         System.out.println();
 
         System.out.println("DELETE KEY");
-        System.out.println("Existing value: " + test.delete("b"));
-        System.out.println("Getting key: " + test.get("b"));
+        System.out.println("Existing value: " + test.delete("d"));
+        System.out.println("Getting key: " + test.get("d"));
         System.out.println();
 
         System.out.println("size: " + test.getSize());
@@ -49,18 +56,22 @@ public class TestHashMap {
         System.out.println();
 
 
-        System.out.println("Resize Properly?");
-     	MyHashMap<String, Object> hashMap = new MyHashMap<>(size);
+        System.out.println("FILL REST OF ARRAY");
+        System.out.println("adding <d: 4> : " + test.set("d", 4));
+        System.out.println("adding <e: 5> : " + test.set("e", 5));
+        System.out.println("adding <f: 6> : " +test.set("f", 6));
+        System.out.println("adding <g: 7> : " +test.set("g", 7));
+        System.out.println("adding <h: 8> : " +test.set("h", 8));
 
-    	for (int i = 0; i < 60; i++) {
-    		hashMap.set("a" + Integer.toString(i), i);	
-    	}
+        System.out.println("adding <i: 9> : " +test.set("i", 9));
+        System.out.println("adding <j: 10> : " +test.set("j", 10));
+        System.out.println("adding <k: 11> : " +test.set("k", 11));
+        System.out.println("adding <l: 12> : " +test.set("l", 12)); //should throw error
+        //test for full array
 
-    	// ((11*2+1)*2+1)*2+1 == 95 <--total array size
-    	System.out.println(hashMap.getTable().length == 95);
-    	System.out.println();
-
-    	System.out.println("Correct size?");
-    	System.out.println(hashMap.getSize() == 60);	
+        System.out.println("Proper Load?");
+        System.out.println("size: " + test.getSize());
+        System.out.println(((float) 11 / (float) size) == test.load());
+        System.out.println();
     }
 }

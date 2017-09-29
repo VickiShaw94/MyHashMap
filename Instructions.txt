@@ -1,0 +1,25 @@
+Instructions to compile and run tests for my implementation of HashMap:
+
+Save and unzip the folder. 
+
+To compile the java classes, navigate into the folder of the files, and type into the command prompt:
+
+javac MyHashMap.java TestHashMap.java
+
+*Warnings for "unchecked or unsafe operations" issued during compilation are due to weak typing and generic array creation.  
+
+To run the simple test cases, type into the command prompt:
+
+java TestHashMap
+
+Explanations:
+
+I used quadratic probing to resolve potential collisions to avoid clusters by increasing jumps. 
+
+h(k, i) = (h(k) + i^2) % m
+
+Though quadratic probing avoid primary clustering, it is prone to secondary clustering. For example, if two keys hash to the same index, they follow the same probe sequence. Another problem is that the probe sequences may not probe all indices in the array. 
+
+Thank you!
+
+Vicki Shaw
